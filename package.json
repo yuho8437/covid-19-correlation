@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "antd": "^4.2.4",
+    "gh-pages": "^2.2.0",
     "plotly.js": "^1.54.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
