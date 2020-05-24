@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="style.css">
+
+    <title>COVID-19 Visualization</title>
+  </head>
+  <body style="margin: 0; box-sizing: border-box;">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Point data type factors -->
+    <div id="root"></div>
+
+    <!-- Time-series data type factors -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+    <h2>2. Time-series data type factors</h2>
+    <div class="wrapper" style="padding: 10px">
+      <div class="sidebar">
+        <h3 style="padding-top:4px; padding-bottom:5px;">Factor List</h3>
+        <div class="listbox">
+          <ul class="mylist">
+            <li id= "item1">Factor1</li>
+            <li id= "item2">Factor2</li>
+            <li id= "item3">Factor3</li>
+            <li id= "item4">Factor4</li>
+            <li id= "item5">Factor5</li>
+            <li id= "item6">Factor6</li>
+            <li id= "item7">Factor7</li>
+            <li id= "item8">Factor8</li>
+            <li id= "item9">Factor9</li>
+            <li id= "item10">Factor10</li>
+            <li id= "item11">Factor11</li>
+            <li id= "item12">Factor12</li>
+            <li id= "item13">Factor13</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="chart" align="center" style="padding-left: 15px">
+        <svg id="my_dataviz" width="600" height="400"style="border:1px solid black"></svg>
+      </div>
+    </div>
+    <script src="./geo_example.js"></script>
+
+  </body>
+</html>

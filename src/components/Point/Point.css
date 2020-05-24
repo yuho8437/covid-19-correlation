@@ -1,0 +1,13 @@
+.TitleBox{
+    margin-bottom: 20px;
+}
+
+.SelectBox{
+    margin-right: 40px;
+}
+
+.ContainerBox {
+    display: flex;
+    width: 1000px;
+    margin: 0 auto;
+}
