@@ -1,8 +1,26 @@
+/* Data load */
+import A65 from '../data/A65.json';
+import A70 from '../data/A70.json';
+import BCG from '../data/BCG.json';
+import CVD from '../data/CVD.json';
+import DC from '../data/DC.json';
+import FSM from '../data/FSM.json';
+import GDP from '../data/GDP.json';
+import HB from '../data/HB.json';
+import HS from '../data/HS.json';
+import HW from '../data/HW.json';
+import MSM from '../data/MSM.json';
+import ND from '../data/ND.json';
+import PD from '../data/PD.json';
+import SEX from '../data/SEX.json';
+
+import iso from '../data/countryList.json';
+
+/* Module load */
 import React from 'react';
 import Plot from 'react-plotly.js';
 import './Point.css';
 import 'antd/dist/antd.css';
-
 import { Select } from 'antd';
 const { Option } = Select;
 
@@ -26,44 +44,183 @@ const factorList = [
 
 function getCountryList(value){
 
-  let CountryList = [];
+  let highCountryList = [];
+  let lowCountryList = [];
+  let data = [];
 
+  for(let i = 0; i < 3; i++){
+    if(value[i] === 'A65')
+      data[i] = A65;
+    else if(value[i] === 'A70')
+      data[i] = A70;
+    else if(value[i] === 'BCG')
+      data[i] = BCG;
+    else if(value[i] === 'CVD')
+      data[i] = CVD;
+    else if(value[i] === 'DC')
+      data[i] = DC;
+    else if(value[i] === 'FSM')
+      data[i] = FSM;
+    else if(value[i] === 'GDP')
+      data[i] = GDP;
+    else if(value[i] === 'HB')
+      data[i] = HB;
+    else if(value[i] === 'HS')
+      data[i] = HS;
+    else if(value[i] === 'HW')
+      data[i] = HW;
+    else if(value[i] === 'MSM')
+      data[i] = MSM;
+    else if(value[i] === 'ND')
+      data[i] = ND;
+    else if(value[i] === 'PD')
+      data[i] = PD;
+    else if(value[i] === 'SEX')
+      data[i] = SEX;
+  }
 
-  return CountryList
+  for (let i = 0; i < iso.iso.length; i++){
+    if(Object.keys(data[0].low).includes(iso.iso[i])){
+      if(Object.keys(data[1].low).includes(iso.iso[i])){
+        if(Object.keys(data[2].low).includes(iso.iso[i])){
+          lowCountryList.push(iso.iso[i]);
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < iso.iso.length; i++){
+    if(Object.keys(data[0].high).includes(iso.iso[i])){
+      if(Object.keys(data[1].high).includes(iso.iso[i])){
+        if(Object.keys(data[2].high).includes(iso.iso[i])){
+          highCountryList.push(iso.iso[i]);
+        }
+      }
+    }
+  }
+
+  return {high: highCountryList, low: lowCountryList};
+}
+
+function setData(value){
+
+  let data;
+
+  if(value === 'A65')
+    data = A65;
+  else if(value === 'A70')
+    data = A70;
+  else if(value === 'BCG')
+    data = BCG;
+  else if(value === 'CVD')
+    data = CVD;
+  else if(value === 'DC')
+    data = DC;
+  else if(value === 'FSM')
+    data = FSM;
+  else if(value === 'GDP')
+    data = GDP;
+  else if(value === 'HB')
+    data = HB;
+  else if(value === 'HS')
+    data = HS;
+  else if(value === 'HW')
+    data = HW;
+  else if(value === 'MSM')
+    data = MSM;
+  else if(value === 'ND')
+    data = ND;
+  else if(value === 'PD')
+    data = PD;
+  else if(value === 'SEX')
+    data = SEX;
+
+  return data;
 }
 
 class Point extends React.Component {
 
-  state = {
-    Xdata: [0],
-    Ydata: [0],
-    Zdata: [0]
-  };
+  state = {};
 
-  loadXdata = ()=>{
-    this.setState({
-      ...this.state,
-      Xdata: []
-    })
+  loadXdata = (value, CountryList)=>{
+
+    let data = setData(value);
+    let highXdata = [];
+    let lowXdata = [];
+
+    for (let i = 0; i < CountryList.high.length; i++){
+      highXdata[i] = data.high[CountryList.high[i]];
+    }
+
+    for (let i = 0; i < CountryList.low.length; i++){
+      lowXdata[i] = data.low[CountryList.low[i]];
+    }
+
+    return {
+      highXdata: highXdata,
+      lowXdata: lowXdata
+    }
   }
   
-  loadYdata = ()=>{
-    this.setState({
-      ...this.state,
-      Ydata: []
-    })
+  loadYdata = (value, CountryList)=>{
+
+    let data = setData(value);
+
+    let highYdata = [];
+    let lowYdata = [];
+
+    for (let i = 0; i < CountryList.high.length; i++){
+      highYdata[i] = data.high[CountryList.high[i]];
+    }
+
+    for (let i = 0; i < CountryList.low.length; i++){
+      lowYdata[i] = data.low[CountryList.low[i]];
+    }
+
+    return{
+      highYdata: highYdata,
+      lowYdata: lowYdata,
+    }
   }
   
-  loadZdata = ()=>{
-    this.setState({
-      ...this.state,
-      Zdata: []
-    })
+  loadZdata = (value, CountryList)=>{
+
+    let data = setData(value);
+
+    let highZdata = [];
+    let lowZdata = [];
+
+    for (let i = 0; i < CountryList.high.length; i++){
+      highZdata[i] = data.high[CountryList.high[i]];
+    }
+
+    for (let i = 0; i < CountryList.low.length; i++){
+      lowZdata[i] = data.low[CountryList.low[i]];
+    }
+
+    return{
+      highZdata: highZdata,
+      lowZdata: lowZdata
+    }
   }
   
   handleChange = (value) => {
     if(value.length === 3){
-      getCountryList(value);
+      let CountryList = getCountryList(value);
+      console.log(CountryList);
+      let Xdata = this.loadXdata(value[0], CountryList);
+      let Ydata = this.loadYdata(value[1], CountryList);
+      let Zdata = this.loadZdata(value[2], CountryList);
+      
+      this.setState({
+        ...this.state,
+        highXdata: Xdata.highXdata,
+        lowXdata: Xdata.lowXdata,
+        highYdata: Ydata.highYdata,
+        lowYdata: Ydata.lowYdata,
+        highZdata: Zdata.highZdata,
+        lowZdata: Zdata.lowZdata
+      })
     }
     else if(value.length > 3){
       alert("Please select factors under three.");
@@ -73,7 +230,8 @@ class Point extends React.Component {
 
   render() {
 
-    const { Xdata, Ydata, Zdata } = this.state;
+    const { highXdata, highYdata, highZdata, 
+            lowXdata, lowYdata, lowZdata } = this.state;
     
     return (
       
@@ -102,17 +260,33 @@ class Point extends React.Component {
             <Plot
               data={[
                 {
-                    x: Xdata,
-                    y: Ydata,
-                    z: Zdata,
-                    type: 'scatter3d',
-                    mode: 'markers',
-                    marker: {
-                      size: 8,
-                      line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
-                      opacity: 0.8
-                    },
-                }
+                  x: highXdata,
+                  y: highYdata,
+                  z: highZdata,
+                  type: 'scatter3d',
+                  mode: 'markers',
+                  name: 'over 7.5% (CFR)',
+                  marker: {
+                    color: 'rgba(246, 71, 71, 1)',
+                    size: 8,
+                    line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                    opacity: 0.8
+                  },
+                },
+                {
+                  x: lowXdata,
+                  y: lowYdata,
+                  z: lowZdata,
+                  type: 'scatter3d',
+                  mode: 'markers',
+                  name: 'under 7.5% (CFR)',
+                  marker: {
+                    color: 'rgba(44, 130, 201, 1)',
+                    size: 8,
+                    line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                    opacity: 0.8
+                  },
+              }
               ]}
               layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
             />
