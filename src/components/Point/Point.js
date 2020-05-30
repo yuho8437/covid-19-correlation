@@ -6,19 +6,77 @@ import 'antd/dist/antd.css';
 import { Select } from 'antd';
 const { Option } = Select;
 
-const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{"factor: " + i.toString(36)}</Option>);
-}
+const factorList = [
+  <Option key={'PD'}>{'1. Population density'}</Option>,
+  <Option key={'GDP'}>{'2. GDP per capita'}</Option>,
+  <Option key={'CVD'}>{'3. Cardiovascular death rate'}</Option>,
+  <Option key={'HW'}>{'4. Handwashing facilities'}</Option>,
+  <Option key={'HB'}>{'5. Hospital beds'}</Option>,
+  <Option key={'ND'}>{'6. Doctors total'}</Option>,
+  <Option key={'DC'}>{'7. Doctor consultations'}</Option>,
+  <Option key={'HS'}>{'8. Health spending'}</Option>,
+  <Option key={'SEX'}>{'9. Gender ratio (confirmed)'}</Option>,
+  <Option key={'BCG'}>{'10. BCG'}</Option>,
+  <Option key={'AIR'}>{'11. Air pollution'}</Option>,
+  <Option key={'A65'}>{'12. Age over 65'}</Option>,
+  <Option key={'A70'}>{'13. Age over 70'}</Option>,
+  <Option key={'FSM'}>{'14. Female smokers'}</Option>,
+  <Option key={'MSM'}>{'15. Male smokers '}</Option>,
+]
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
+function getCountryList(value){
+
+  let CountryList = [];
+
+
+  return CountryList
 }
 
 class Point extends React.Component {
+
+  state = {
+    Xdata: [0],
+    Ydata: [0],
+    Zdata: [0]
+  };
+
+  loadXdata = ()=>{
+    this.setState({
+      ...this.state,
+      Xdata: []
+    })
+  }
+  
+  loadYdata = ()=>{
+    this.setState({
+      ...this.state,
+      Ydata: []
+    })
+  }
+  
+  loadZdata = ()=>{
+    this.setState({
+      ...this.state,
+      Zdata: []
+    })
+  }
+  
+  handleChange = (value) => {
+    if(value.length === 3){
+      getCountryList(value);
+    }
+    else if(value.length > 3){
+      alert("Please select factors under three.");
+      value.pop()
+    }
+  }
+
   render() {
+
+    const { Xdata, Ydata, Zdata } = this.state;
     
     return (
+      
       <div style = {{marginTop: "50px"}}>
 
         <div className = "TitleBox">
@@ -34,9 +92,9 @@ class Point extends React.Component {
               mode="multiple"
               placeholder="Please select"
               defaultValue={[ ]}
-              onChange={handleChange}
+              onChange={this.handleChange}
             >
-              {children}
+              {factorList}
             </Select>
           </div>
 
@@ -44,33 +102,17 @@ class Point extends React.Component {
             <Plot
               data={[
                 {
-                    x: [1, 2, 1.5, 1.3],
-                    y: [2, 2, 1, 2.5],
-                    z: [1, 2, 2, 1.5],
+                    x: Xdata,
+                    y: Ydata,
+                    z: Zdata,
                     type: 'scatter3d',
                     mode: 'markers',
                     marker: {
                       size: 8,
-                      line: {
-                      color: 'rgba(217, 217, 217, 0.14)',
-                      width: 0.5},
+                      line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
                       opacity: 0.8
                     },
-                }, 
-                {
-                  x: [3.5, 3, 3, 2.5],
-                  y: [3, 4, 4, 2.5],
-                  z: [3, 3.5, 3, 3.5],
-                  type: 'scatter3d',
-                  mode: 'markers',
-                  marker: {
-                    size: 8,
-                    line: {
-                    color: 'rgb(204, 204, 204)',
-                    width: 0.5},
-                    opacity: 0.8
-                  },
-              }
+                }
               ]}
               layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
             />
