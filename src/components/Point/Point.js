@@ -21,7 +21,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './Point.css';
 import 'antd/dist/antd.css';
-import { Select } from 'antd';
+import { Select, Button } from 'antd';
 const { Option } = Select;
 
 const factorList = [
@@ -140,7 +140,7 @@ function setData(value){
 
 class Point extends React.Component {
 
-  state = {};
+  state = {is_clicked: false};
 
   loadXdata = (value, CountryList)=>{
 
@@ -205,6 +205,7 @@ class Point extends React.Component {
   }
   
   handleChange = (value) => {
+    
     if(value.length === 3){
       let CountryList = getCountryList(value);
       console.log(CountryList);
@@ -214,6 +215,11 @@ class Point extends React.Component {
       
       this.setState({
         ...this.state,
+        xaxis: value[0],
+        yaxis: value[1],
+        zaxis: value[2],
+        highCountryList: CountryList.high,
+        lowCountryList: CountryList.low,
         highXdata: Xdata.highXdata,
         lowXdata: Xdata.lowXdata,
         highYdata: Ydata.highYdata,
@@ -222,16 +228,38 @@ class Point extends React.Component {
         lowZdata: Zdata.lowZdata
       })
     }
+
     else if(value.length > 3){
       alert("Please select factors under three.");
       value.pop()
     }
   }
+  
+  handleClick = (value) => {
+
+    this.setState({
+      ...this.state,
+      is_clicked: true
+    })
+
+  }
+
+  handleRefresh = (value) => {
+
+    this.setState({
+      ...this.state,
+      is_clicked: false
+    })
+
+  }
 
   render() {
 
-    const { highXdata, highYdata, highZdata, 
-            lowXdata, lowYdata, lowZdata } = this.state;
+    const { xaxis, yaxis, zaxis,
+            highCountryList, lowCountryList,
+            highXdata, highYdata, highZdata, 
+            lowXdata, lowYdata, lowZdata,
+            is_clicked } = this.state;
     
     return (
       
@@ -254,44 +282,83 @@ class Point extends React.Component {
             >
               {factorList}
             </Select>
+
+            <h3 style = {{marginTop:'20px'}}>Check the answers</h3>
+            <Button 
+              style={{width:"200px"}}
+              onClick={this.handleClick}
+            >
+              Correlation result >
+            </Button>
+            {
+              (is_clicked)?
+              <div>
+                <h3 style = {{marginTop:'20px'}}>Back to scatter plot</h3>
+                <Button 
+                  style={{width:"195px"}}
+                  type="primary"
+                  onClick={this.handleRefresh}
+                >
+                  Refresh
+                </Button>
+              </div>:
+              <div/>
+            }
           </div>
 
           <div className = "PlotBox">
-            <Plot
-              data={[
-                {
-                  x: highXdata,
-                  y: highYdata,
-                  z: highZdata,
-                  type: 'scatter3d',
-                  mode: 'markers',
-                  name: 'over 7.5% (CFR)',
-                  marker: {
-                    color: 'rgba(246, 71, 71, 1)',
-                    size: 8,
-                    line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
-                    opacity: 0.8
-                  },
-                },
-                {
-                  x: lowXdata,
-                  y: lowYdata,
-                  z: lowZdata,
-                  type: 'scatter3d',
-                  mode: 'markers',
-                  name: 'under 7.5% (CFR)',
-                  marker: {
-                    color: 'rgba(44, 130, 201, 1)',
-                    size: 8,
-                    line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
-                    opacity: 0.8
-                  },
-              }
-              ]}
-              layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
-            />
+            {
+              (is_clicked)?
+                <div>
+                  <p>Correlation result 띄우기</p>
+                </div>:
+                <div>
+                  <Plot
+                    data={[
+                      {
+                        hovertext: highCountryList,
+                        x: highXdata,
+                        y: highYdata,
+                        z: highZdata,
+                        type: 'scatter3d',
+                        mode: 'markers',
+                        name: 'over 7.5% (CFR)',
+                        marker: {
+                          color: 'rgba(246, 71, 71, 1)',
+                          size: 8,
+                          line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                          opacity: 0.8
+                        },
+                      },
+                      {
+                        hovertext: lowCountryList,
+                        x: lowXdata,
+                        y: lowYdata,
+                        z: lowZdata,
+                        type: 'scatter3d',
+                        mode: 'markers',
+                        name: 'under 7.5% (CFR)',
+                        marker: {
+                          color: 'rgba(44, 130, 201, 1)',
+                          size: 8,
+                          line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                          opacity: 0.8
+                        },
+                    }
+                    ]}
+                    layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
+                  />
+                </div>
+            }
           </div>
         </div>
+
+        {
+          (is_clicked)?
+          <div/>:
+          <h3> x = {xaxis} &nbsp;&nbsp;&nbsp; y = {yaxis} &nbsp;&nbsp;&nbsp; z = {zaxis} </h3>
+        }
+
       </div>
       );
   }
