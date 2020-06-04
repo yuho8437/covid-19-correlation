@@ -21,7 +21,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './Point.css';
 import 'antd/dist/antd.css';
-import { Select, Button } from 'antd';
+import { Select, Button, Spin, Space } from 'antd';
 const { Option } = Select;
 
 const factorList = [
@@ -139,6 +139,18 @@ function setData(value){
 }
 
 class Point extends React.Component {
+
+  componentWillMount(){
+
+      return (
+        <div>
+          <Space size="middle">
+            <Spin size="large" />
+          </Space>
+        </div>
+      )
+  }
+
 
   state = {is_clicked: false};
 
@@ -310,7 +322,10 @@ class Point extends React.Component {
             {
               (is_clicked)?
                 <div>
-                  <p>Correlation result 띄우기</p>
+                  <img 
+                    style = {{height: '480px'}}
+                    src={process.env.PUBLIC_URL + '/corr_result.png'}
+                  />
                 </div>:
                 <div>
                   <Plot
