@@ -10,12 +10,10 @@ import { Select, Button, Slider } from 'antd';
 const { Option } = Select;
 
 const factorList = [
-  <Option key={'A'}>{'1. A'}</Option>,
-  <Option key={'B'}>{'2. B'}</Option>,
-  <Option key={'C'}>{'3. C'}</Option>,
-  <Option key={'D'}>{'4. D'}</Option>,
-  <Option key={'E'}>{'5. E'}</Option>,
-  <Option key={'F'}>{'6. F'}</Option>,
+  <Option key={'UV Radaition'}>{'1. UV Radaition'}</Option>,
+  <Option key={'Temperature'}>{'2. Temperature'}</Option>,
+  <Option key={'Humidity'}>{'3. Humidity'}</Option>,
+  <Option key={'Ozone concentration'}>{'4. Ozone concentration'}</Option>
 ]
 
 function unpack(rows, key) {
@@ -33,9 +31,46 @@ function unpack(rows, key) {
 class TimeSeries extends React.Component {
 
     state = {
+        selectedFactor: "None",
         minValue: 0, maxValue:100,
         is_clicked: false
     };
+
+    handleChange = (value) => {
+    
+        if(value.length === 1){
+          /*let CountryList = getCountryList(value);
+          console.log(CountryList);
+          let Xdata = this.loadXdata(value[0], CountryList);
+          let Ydata = this.loadYdata(value[1], CountryList);
+          let Zdata = this.loadZdata(value[2], CountryList);
+          
+          this.setState({
+            ...this.state,
+            xaxis: value[0],
+            yaxis: value[1],
+            zaxis: value[2],
+            highCountryList: CountryList.high,
+            lowCountryList: CountryList.low,
+            highXdata: Xdata.highXdata,
+            lowXdata: Xdata.lowXdata,
+            highYdata: Ydata.highYdata,
+            lowYdata: Ydata.lowYdata,
+            highZdata: Zdata.highZdata,
+            lowZdata: Zdata.lowZdata
+          })*/
+
+          this.setState({
+            ...this.state,
+            selectedFactor: value[0],
+          })
+        }
+    
+        else if(value.length > 1){
+          alert("Please select only one factor.");
+          value.pop()
+        }
+      }
 
     handleClick = (value) => {
         this.setState({
@@ -54,6 +89,7 @@ class TimeSeries extends React.Component {
     render(){
 
         const { 
+            selectedFactor,
             minValue, maxValue,
             is_clicked 
         } = this.state;
@@ -114,7 +150,7 @@ class TimeSeries extends React.Component {
                         data={[
                             {
                                 type: 'choropleth',
-                                locationmode: 'country names',
+                                locationmode: 'ISO-3',
                                 locations: unpack(TEST, 'location'),
                                 z: unpack(TEST, 'value'),
                                 text: unpack(TEST, 'location'),
@@ -125,14 +161,7 @@ class TimeSeries extends React.Component {
                                         width: 1
                                     }
                                 },
-                                tick0: 0,
-                                zmin: 0,
-                                dtick: 1000,
-                                colorbar: {
-                                    autotic: false,
-                                    tickprefix: '$',
-                                    title: 'GDP<br>Billions US$'
-                                }
+                                showscale: false,
                             }
                         ]}
                         layout={
@@ -168,6 +197,7 @@ class TimeSeries extends React.Component {
                                     style={{ width: '400px', margin: "20px auto"}}
                                     marks={{0: minValue, 100: maxValue}} 
                                 />
+                                <h3>[{selectedFactor}]</h3>
                             </div>
                     }
                 </div>

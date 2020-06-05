@@ -355,7 +355,7 @@ class Point extends React.Component {
         {
           (is_clicked)?
           <div/>:
-          <h3> x = {xaxis} &nbsp;&nbsp;&nbsp; y = {yaxis} &nbsp;&nbsp;&nbsp; z = {zaxis} </h3>
+          <h3>[ x = {xaxis} &nbsp;&nbsp;&nbsp; y = {yaxis} &nbsp;&nbsp;&nbsp; z = {zaxis} ]</h3>
         }
 
       </div>
