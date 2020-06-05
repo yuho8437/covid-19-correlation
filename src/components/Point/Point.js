@@ -21,7 +21,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './Point.css';
 import 'antd/dist/antd.css';
-import { Select, Button, Spin, Space } from 'antd';
+import { Select, Button } from 'antd';
 const { Option } = Select;
 
 const factorList = [
@@ -140,18 +140,6 @@ function setData(value){
 
 class Point extends React.Component {
 
-  componentWillMount(){
-
-      return (
-        <div>
-          <Space size="middle">
-            <Spin size="large" />
-          </Space>
-        </div>
-      )
-  }
-
-
   state = {is_clicked: false};
 
   loadXdata = (value, CountryList)=>{
@@ -248,21 +236,17 @@ class Point extends React.Component {
   }
   
   handleClick = (value) => {
-
     this.setState({
       ...this.state,
       is_clicked: true
     })
-
   }
 
   handleRefresh = (value) => {
-
     this.setState({
       ...this.state,
       is_clicked: false
     })
-
   }
 
   render() {
@@ -284,7 +268,7 @@ class Point extends React.Component {
         <div className = "ContainerBox">
 
           <div className = "SelectBox">
-            <h3>Select the three factors</h3>
+            <h3>Select three factors</h3>
             <Select
               style={{width:"200px"}}
               mode="multiple"
