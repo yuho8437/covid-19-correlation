@@ -39,27 +39,6 @@ class TimeSeries extends React.Component {
     handleChange = (value) => {
     
         if(value.length === 1){
-          /*let CountryList = getCountryList(value);
-          console.log(CountryList);
-          let Xdata = this.loadXdata(value[0], CountryList);
-          let Ydata = this.loadYdata(value[1], CountryList);
-          let Zdata = this.loadZdata(value[2], CountryList);
-          
-          this.setState({
-            ...this.state,
-            xaxis: value[0],
-            yaxis: value[1],
-            zaxis: value[2],
-            highCountryList: CountryList.high,
-            lowCountryList: CountryList.low,
-            highXdata: Xdata.highXdata,
-            lowXdata: Xdata.lowXdata,
-            highYdata: Ydata.highYdata,
-            lowYdata: Ydata.lowYdata,
-            highZdata: Zdata.highZdata,
-            lowZdata: Zdata.lowZdata
-          })*/
-
           this.setState({
             ...this.state,
             selectedFactor: value[0],
@@ -143,7 +122,7 @@ class TimeSeries extends React.Component {
                         <div>
                           <img 
                             style = {{height: '480px'}}
-                            src={process.env.PUBLIC_URL + '/corr_result.png'}
+                            src={process.env.PUBLIC_URL + '/corr_result_ser.png'}
                           />
                         </div>:
                         <Plot
@@ -153,7 +132,8 @@ class TimeSeries extends React.Component {
                                 locationmode: 'ISO-3',
                                 locations: unpack(TEST, 'location'),
                                 z: unpack(TEST, 'value'),
-                                text: unpack(TEST, 'location'),
+                                text: unpack(TEST, 'text'),
+                                hoverinfo: "location+text",
                                 autocolorscale: true,
                                 marker: {
                                     line:{
