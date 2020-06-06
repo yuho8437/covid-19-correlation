@@ -81,7 +81,7 @@ class TimeSeries extends React.Component {
 
                 <div className = "ContainerBox">
 
-                  <div className = "SelectBox">
+                  <div className = "SelectBox" style={{marginRight: '20px'}}>
                     <h3>Select one factor</h3>
                     <Select
                       style={{width:"200px"}}
@@ -159,7 +159,7 @@ class TimeSeries extends React.Component {
                                         type: 'mercator'
                                     }
                                 },
-                                width: 600, height: 400, margin: {t: 0, b: 0, l: 0}
+                                width: 650, height: 500, margin: {t: 0, b: 0, l: 0}
                             }
                         }
                         />

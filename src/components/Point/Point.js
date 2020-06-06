@@ -24,6 +24,17 @@ import 'antd/dist/antd.css';
 import { Select, Button } from 'antd';
 const { Option } = Select;
 
+const initialPlotStyle = {
+  width: '533px',
+  height: '450px',
+  backgroundColor: 'rgb(240, 240, 240)',
+  borderRadius: '1rem',
+  margin: '0 0 0 0',
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center'
+}
+
 const factorList = [
   <Option key={'PD'}>{'1. Population density'}</Option>,
   <Option key={'GDP'}>{'2. GDP per capita'}</Option>,
@@ -140,7 +151,10 @@ function setData(value){
 
 class Point extends React.Component {
 
-  state = {is_clicked: false};
+  state = {
+    is_value: false,
+    is_clicked: false
+  };
 
   loadXdata = (value, CountryList)=>{
 
@@ -215,6 +229,7 @@ class Point extends React.Component {
       
       this.setState({
         ...this.state,
+        is_value: true,
         xaxis: value[0],
         yaxis: value[1],
         zaxis: value[2],
@@ -251,7 +266,8 @@ class Point extends React.Component {
 
   render() {
 
-    const { xaxis, yaxis, zaxis,
+    const { is_value,
+            xaxis, yaxis, zaxis,
             highCountryList, lowCountryList,
             highXdata, highYdata, highZdata, 
             lowXdata, lowYdata, lowZdata,
@@ -311,44 +327,50 @@ class Point extends React.Component {
                     src={process.env.PUBLIC_URL + '/corr_result.png'}
                   />
                 </div>:
-                <div>
-                  <Plot
-                    data={[
-                      {
-                        hovertext: highCountryList,
-                        x: highXdata,
-                        y: highYdata,
-                        z: highZdata,
-                        type: 'scatter3d',
-                        mode: 'markers',
-                        name: 'over 7.5% (CFR)',
-                        marker: {
-                          color: 'rgba(246, 71, 71, 1)',
-                          size: 8,
-                          line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
-                          opacity: 0.8
-                        },
-                      },
-                      {
-                        hovertext: lowCountryList,
-                        x: lowXdata,
-                        y: lowYdata,
-                        z: lowZdata,
-                        type: 'scatter3d',
-                        mode: 'markers',
-                        name: 'under 7.5% (CFR)',
-                        marker: {
-                          color: 'rgba(44, 130, 201, 1)',
-                          size: 8,
-                          line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
-                          opacity: 0.8
-                        },
-                    }
-                    ]}
-                    layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
-                  />
-                </div>
-            }
+                  (is_value)?
+                    <div>
+                      <Plot
+                        data={[
+                          {
+                            hovertext: highCountryList,
+                            x: highXdata,
+                            y: highYdata,
+                            z: highZdata,
+                            type: 'scatter3d',
+                            mode: 'markers',
+                            name: 'over 7.5% (CFR)',
+                            marker: {
+                              color: 'rgba(246, 71, 71, 1)',
+                              size: 8,
+                              line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                              opacity: 0.8
+                            },
+                          },
+                          {
+                            hovertext: lowCountryList,
+                            x: lowXdata,
+                            y: lowYdata,
+                            z: lowZdata,
+                            type: 'scatter3d',
+                            mode: 'markers',
+                            name: 'under 7.5% (CFR)',
+                            marker: {
+                              color: 'rgba(44, 130, 201, 1)',
+                              size: 8,
+                              line: { color: 'rgba(217, 217, 217, 0.14)', width: 0.5 },
+                              opacity: 0.8
+                            },
+                        }
+                        ]}
+                        layout={{margin: {l: 0, r: 0, b: 0, t: 0 }}}
+                      />
+                    </div>:
+                    <div>
+                      <div style={initialPlotStyle}>
+                        <h3>You didn't select factors yet.</h3>
+                      </div>
+                    </div>
+            }   
           </div>
         </div>
 
