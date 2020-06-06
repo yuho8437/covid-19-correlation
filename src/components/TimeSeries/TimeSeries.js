@@ -10,6 +10,8 @@ import Pressure from '../../seriesData/pressure.json';
 import Precipitation from '../../seriesData/precipitation.json';
 import UV from '../../seriesData/UV.json';
 
+import fatalityDict from '../../seriesData/fatalityDict.json';
+
 /* Module load */
 import React from 'react';
 import './TimeSeries.css';
@@ -95,27 +97,46 @@ function getCountries(data, currentValue){
   return currentCountryList;
 };
 
-function getDataZ(data, currentCountryList, currentValue){
+function getDataZ(currentCountryList){
 
-  let rows = data[currentValue];
+  let fatalityList = [];
 
-  return rows.map(
-    function(row) { 
-        return 1; 
-    }
-  );
+  for (let i = 0; i < currentCountryList.length; i++){
+    fatalityList[i] = fatalityDict[currentCountryList[i]];
+  }
+
+  return fatalityList;
 };
 
 function getDataText(data, currentCountryList, currentValue){
   
-  let rows = data[currentValue];
+  let textList = [];
+  let currentData = data[currentValue];
+  let counter = 0;
+  console.log(currentData);
 
-  return rows.map(
-    function(row) { 
-        return 1; 
+  for (let i = 0; i < currentCountryList.length; i++){
+    for(let j = 0; j < currentData.length; j++){
+      if (currentData[j]['iso'] === currentCountryList[i]){
+        if (textList[i]){
+          textList[i] = textList[i] + '<br>' + 
+            currentData[j]['date'] + ': ' + currentData[j]['fatality rate'];
+        }
+        else{
+          textList[i] = '[One day CFR] <br>' + currentData[j]['date'] + ': ' + currentData[j]['fatality rate'];
+        }
+        counter++;
+      }
+
+      if (counter > 19){
+        textList[i] = textList[i] + '<br> ...too many'
+        break;
+      }
     }
-  );
+    counter = 0;
+  }
 
+  return textList;
 };
 
 class TimeSeries extends React.Component {
@@ -133,7 +154,7 @@ class TimeSeries extends React.Component {
         let currentCountryList = getCountries(this.state.data, currentValue);
 
         let dataLocations = currentCountryList;
-        let dataZ = getDataZ(this.state.data, currentCountryList, currentValue);
+        let dataZ = getDataZ(currentCountryList);
         let dataText = getDataText(this.state.data, currentCountryList, currentValue);
 
         this.setState({
@@ -257,6 +278,8 @@ class TimeSeries extends React.Component {
                                   locationmode: 'ISO-3',
                                   locations: dataLocations,
                                   z: dataZ,
+                                  zmin: 0,
+                                  zmax: 20,
                                   text: dataText,
                                   hoverinfo: "location+text",
                                   autocolorscale: true,
