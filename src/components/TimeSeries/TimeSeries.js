@@ -1,5 +1,14 @@
 /* Data load */
-import TEST from '../data/TEST.json';
+import TEST from '../../seriesData/TEST.json';
+
+import Daytime from '../../seriesData/daytime.json';
+import Temperature from '../../seriesData/temperature.json';
+import Humidity from '../../seriesData/humidity.json';
+import Ozone from '../../seriesData/ozone.json';
+import Windspeed from '../../seriesData/windspeed.json';
+import Pressure from '../../seriesData/pressure.json';
+import Precipitation from '../../seriesData/precipitation.json';
+import UV from '../../seriesData/UV.json';
 
 /* Module load */
 import React from 'react';
@@ -9,38 +18,146 @@ import Plot from 'react-plotly.js';
 import { Select, Button, Slider } from 'antd';
 const { Option } = Select;
 
+const initialPlotStyle = {
+  width: '533px',
+  height: '450px',
+  backgroundColor: 'rgb(240, 240, 240)',
+  borderRadius: '1rem',
+  margin: '0 0 0 0',
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center',
+  marginLeft: '20px'
+}
+
 const factorList = [
-  <Option key={'UV Radaition'}>{'1. UV Radaition'}</Option>,
-  <Option key={'Temperature'}>{'2. Temperature'}</Option>,
+  <Option key={'Daytime'}>{'1. Daytime'}</Option>,
+  <Option key={'Temperature (°F)'}>{'2. Temperature'}</Option>,
   <Option key={'Humidity'}>{'3. Humidity'}</Option>,
-  <Option key={'Ozone concentration'}>{'4. Ozone concentration'}</Option>
+  <Option key={'Ozone concentration'}>{'4. Ozone concentration'}</Option>,
+  <Option key={'Wind speed'}>{'5. Wind speed'}</Option>,
+  <Option key={'Atmospheric pressure'}>{'6. Atmospheric pressure'}</Option>,
+  <Option key={'Precipitation'}>{'7. Precipitation'}</Option>,
+  <Option key={'UV Radiation'}>{'8. UV Radiation'}</Option>
 ]
 
 function unpack(rows, key) {
-
-    console.log(rows);
-
     return rows.map(
         function(row) { 
-            console.log(row);
             return row[key]; 
         }
     );
 }
 
+function setData(value){
+
+  let data;
+
+  if(value === 'Daytime')
+    data = Daytime;
+  else if(value === 'Temperature (°F)')
+    data = Temperature;
+  else if(value === 'Humidity')
+    data = Humidity;
+  else if(value === 'Ozone concentration')
+    data = Ozone;
+  else if(value === 'Wind speed')
+    data = Windspeed;
+  else if(value === 'Atmospheric pressure')
+    data = Pressure;
+  else if(value === 'Precipitation')
+    data = Precipitation;
+  else if(value === 'UV Radiation')
+    data = UV;
+
+  return data;
+};
+
+function getMinValue(data) {
+  return Object.keys(data)[0];
+};
+
+function getMaxValue(data){
+  return Object.keys(data)[Object.keys(data).length - 1];
+};
+
+function getCountries(data, currentValue){
+
+  let rows = data[currentValue];
+  let currentCountryList = []
+
+  for(let i = 0; i<Object.keys(rows).length; i++){
+    if(!currentCountryList.includes(rows[i]['iso'])){
+      currentCountryList.push(rows[i]['iso']);
+    }
+  }
+
+  return currentCountryList;
+};
+
+function getDataZ(data, currentCountryList, currentValue){
+
+  let rows = data[currentValue];
+
+  return rows.map(
+    function(row) { 
+        return 1; 
+    }
+  );
+};
+
+function getDataText(data, currentCountryList, currentValue){
+  
+  let rows = data[currentValue];
+
+  return rows.map(
+    function(row) { 
+        return 1; 
+    }
+  );
+
+};
+
 class TimeSeries extends React.Component {
 
     state = {
+        data: [],
         selectedFactor: "None",
         minValue: 0, maxValue:100,
         is_clicked: false
     };
 
+    sliderChange = (value) => {
+      if (Object.keys(this.state.data)[0]){
+        let currentValue = Object.keys(this.state.data)[Math.round(value/2.5)];
+        let currentCountryList = getCountries(this.state.data, currentValue);
+
+        let dataLocations = currentCountryList;
+        let dataZ = getDataZ(this.state.data, currentCountryList, currentValue);
+        let dataText = getDataText(this.state.data, currentCountryList, currentValue);
+
+        this.setState({
+          currentValue: currentValue,
+          dataLocations: dataLocations, 
+          dataZ: dataZ,
+          dataText: dataText,
+        })
+      }
+    };
+
     handleChange = (value) => {
     
         if(value.length === 1){
+
+          let data = setData(value[0]);
+          let minValue = getMinValue(data);
+          let maxValue = getMaxValue(data);
+
+          console.log(data);
           this.setState({
             ...this.state,
+            data: data,
+            minValue: minValue, maxValue: maxValue,
             selectedFactor: value[0],
           })
         }
@@ -68,8 +185,10 @@ class TimeSeries extends React.Component {
     render(){
 
         const { 
+            data,
+            dataLocations, dataZ, dataText,
             selectedFactor,
-            minValue, maxValue,
+            minValue, maxValue, currentValue,
             is_clicked 
         } = this.state;
 
@@ -105,7 +224,7 @@ class TimeSeries extends React.Component {
                       <div>
                         <h3 style = {{marginTop:'20px'}}>Back to choropleth map</h3>
                         <Button 
-                          style={{width:"195px"}}
+                          style={{width:"200px"}}
                           type="primary"
                           onClick={this.handleRefresh}
                         >
@@ -125,44 +244,54 @@ class TimeSeries extends React.Component {
                             src={process.env.PUBLIC_URL + '/corr_result_ser.png'}
                           />
                         </div>:
-                        <Plot
-                        data={[
-                            {
-                                type: 'choropleth',
-                                locationmode: 'ISO-3',
-                                locations: unpack(TEST, 'location'),
-                                z: unpack(TEST, 'value'),
-                                text: unpack(TEST, 'text'),
-                                hoverinfo: "location+text",
-                                autocolorscale: true,
-                                marker: {
-                                    line:{
-                                        color: 'rgb(255,255,255)',
-                                        width: 1
-                                    }
-                                },
-                                showscale: false,
-                            }
-                        ]}
-                        layout={
-                            {
-                                geo:{
-                                    countrycolor: 'rgb(255, 255, 255)',
-                                    showland: true,
-                                    landcolor: 'rgb(230, 230, 230)',
-                                    subunitcolor: 'rgb(255, 255, 255)',
-                                    showcoastlines: false,
-                                    showframe: false,
-                                    lonaxis: {},
-                                    lataxis: {},
-                                    projection:{
-                                        type: 'mercator'
-                                    }
-                                },
-                                width: 650, height: 500, margin: {t: 0, b: 0, l: 0}
-                            }
-                        }
-                        />
+                        (selectedFactor === 'None')?
+                          <div>
+                            <div style={initialPlotStyle}>
+                              <h3>You didn't select factor yet.</h3>
+                            </div>
+                          </div>:
+                          <Plot
+                          data={[
+                              {
+                                  type: 'choropleth',
+                                  locationmode: 'ISO-3',
+                                  locations: dataLocations,
+                                  z: dataZ,
+                                  text: dataText,
+                                  hoverinfo: "location+text",
+                                  autocolorscale: true,
+                                  marker: {
+                                      line:{
+                                          color: 'rgb(255,255,255)',
+                                          width: 1
+                                      }
+                                  },
+                                  colorbar: {
+                                      autotic: false,
+                                      tickprefix: '%',
+                                      title: 'Fatality rate',
+                                  }
+                              }
+                          ]}
+                          layout={
+                              {
+                                  geo:{
+                                      countrycolor: 'rgb(255, 255, 255)',
+                                      showland: true,
+                                      landcolor: 'rgb(230, 230, 230)',
+                                      subunitcolor: 'rgb(255, 255, 255)',
+                                      showcoastlines: false,
+                                      showframe: false,
+                                      lonaxis: {},
+                                      lataxis: {},
+                                      projection:{
+                                          type: 'mercator'
+                                      }
+                                  },
+                                  width: 650, height: 500, margin: {t: 0, b: 0, l: 0}
+                              }
+                          }
+                          />
                     }
                   </div>
                   
@@ -175,7 +304,9 @@ class TimeSeries extends React.Component {
                             <div>
                                 <Slider 
                                     style={{ width: '400px', margin: "20px auto"}}
-                                    marks={{0: minValue, 100: maxValue}} 
+                                    marks={{0: minValue, 100: maxValue}}
+                                    tipFormatter={function formatter(value) {return `${currentValue}`}}
+                                    onChange={this.sliderChange}
                                 />
                                 <h3>[{selectedFactor}]</h3>
                             </div>

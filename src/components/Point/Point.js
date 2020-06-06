@@ -1,20 +1,20 @@
 /* Data load */
-import A65 from '../data/A65.json';
-import A70 from '../data/A70.json';
-import BCG from '../data/BCG.json';
-import CVD from '../data/CVD.json';
-import DC from '../data/DC.json';
-import FSM from '../data/FSM.json';
-import GDP from '../data/GDP.json';
-import HB from '../data/HB.json';
-import HS from '../data/HS.json';
-import HW from '../data/HW.json';
-import MSM from '../data/MSM.json';
-import ND from '../data/ND.json';
-import PD from '../data/PD.json';
-import SEX from '../data/SEX.json';
+import A65 from '../../pointData/A65.json';
+import A70 from '../../pointData/A70.json';
+import BCG from '../../pointData/BCG.json';
+import CVD from '../../pointData/CVD.json';
+import DC from '../../pointData/DC.json';
+import FSM from '../../pointData/FSM.json';
+import GDP from '../../pointData/GDP.json';
+import HB from '../../pointData/HB.json';
+import HS from '../../pointData/HS.json';
+import HW from '../../pointData/HW.json';
+import MSM from '../../pointData/MSM.json';
+import ND from '../../pointData/ND.json';
+import PD from '../../pointData/PD.json';
+import SEX from '../../pointData/SEX.json';
 
-import iso from '../data/countryList.json';
+import iso from '../../pointData/countryList.json';
 
 /* Module load */
 import React from 'react';
@@ -307,7 +307,7 @@ class Point extends React.Component {
               <div>
                 <h3 style = {{marginTop:'20px'}}>Back to scatter plot</h3>
                 <Button 
-                  style={{width:"195px"}}
+                  style={{width:"200px"}}
                   type="primary"
                   onClick={this.handleRefresh}
                 >
