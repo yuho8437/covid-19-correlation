@@ -43,14 +43,6 @@ const factorList = [
   <Option key={'UV Radiation'}>{'8. UV Radiation'}</Option>
 ]
 
-function unpack(rows, key) {
-    return rows.map(
-        function(row) { 
-            return row[key]; 
-        }
-    );
-}
-
 function setData(value){
 
   let data;
@@ -123,7 +115,7 @@ function getDataText(data, currentCountryList, currentValue){
             currentData[j]['date'] + ': ' + currentData[j]['fatality rate'];
         }
         else{
-          textList[i] = '[One day CFR] <br>' + currentData[j]['date'] + ': ' + currentData[j]['fatality rate'];
+          textList[i] = '[Death/Confirmed] <br>' + currentData[j]['date'] + ': ' + currentData[j]['fatality rate'];
         }
         counter++;
       }
@@ -147,6 +139,27 @@ class TimeSeries extends React.Component {
         minValue: 0, maxValue:100,
         is_clicked: false
     };
+
+    formatter = (value) => {
+
+      let currentValue = this.state.currentValue;
+      let data = this.state.data;
+      let result;
+    
+      if(data === Daytime){
+        result = currentValue;
+      }
+      else if (data === Temperature || data === Humidity || data === Ozone || data === Windspeed || data === Pressure){
+        currentValue = Number(currentValue);
+        result = currentValue.toFixed(2);
+      }
+      else if (data === Precipitation){
+        currentValue = Number(currentValue);
+        result = currentValue.toFixed(4);
+      }
+    
+      return `${result}`;
+    }
 
     sliderChange = (value) => {
       if (Object.keys(this.state.data)[0]){
@@ -261,7 +274,7 @@ class TimeSeries extends React.Component {
                       (is_clicked)?
                         <div>
                           <img 
-                            style = {{height: '480px'}}
+                            style = {{height: '480px', marginLeft: '20px'}}
                             src={process.env.PUBLIC_URL + '/corr_result_ser.png'}
                           />
                         </div>:
@@ -328,7 +341,7 @@ class TimeSeries extends React.Component {
                                 <Slider 
                                     style={{ width: '400px', margin: "20px auto"}}
                                     marks={{0: minValue, 100: maxValue}}
-                                    tipFormatter={function formatter(value) {return `${currentValue}`}}
+                                    tipFormatter={this.formatter}
                                     onChange={this.sliderChange}
                                 />
                                 <h3>[{selectedFactor}]</h3>
