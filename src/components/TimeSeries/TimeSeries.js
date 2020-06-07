@@ -1,6 +1,4 @@
 /* Data load */
-import TEST from '../../seriesData/TEST.json';
-
 import Daytime from '../../seriesData/daytime.json';
 import Temperature from '../../seriesData/temperature.json';
 import Humidity from '../../seriesData/humidity.json';
@@ -219,10 +217,9 @@ class TimeSeries extends React.Component {
     render(){
 
         const { 
-            data,
             dataLocations, dataZ, dataText,
             selectedFactor,
-            minValue, maxValue, currentValue,
+            minValue, maxValue,
             is_clicked 
         } = this.state;
 

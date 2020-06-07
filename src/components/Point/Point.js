@@ -13,6 +13,7 @@ import MSM from '../../pointData/MSM.json';
 import ND from '../../pointData/ND.json';
 import PD from '../../pointData/PD.json';
 import SEX from '../../pointData/SEX.json';
+import AIR from '../../pointData/AIR.json';
 
 import iso from '../../pointData/countryList.json';
 
@@ -88,6 +89,8 @@ function getCountryList(value){
       data[i] = PD;
     else if(value[i] === 'SEX')
       data[i] = SEX;
+    else if(value[i] === 'AIR')
+      data[i] = AIR;
   }
 
   for (let i = 0; i < iso.iso.length; i++){
@@ -145,6 +148,8 @@ function setData(value){
     data = PD;
   else if(value === 'SEX')
     data = SEX;
+    else if(value === 'AIR')
+    data = AIR;
 
   return data;
 }
