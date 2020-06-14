@@ -18,7 +18,10 @@ class Header extends React.Component {
     
     return (
         <div>
-            <h1><strong>Correlation Analysis of Fatality Rate and <br/>Visualization in COVID-19</strong></h1>
+            <h1><strong>Correlation Analysis and Visualization of COVID-19</strong></h1>
+            <a href={process.env.PUBLIC_URL + '/report.pdf'}>
+                Correlation Analysis of Fatality Rate through COVID-19 Data Visualization [pdf] 
+            </a> 
 
             <div style = {nameStyle}>
                 
