@@ -1,4 +1,4 @@
-##Correlation Analysis of Fatality Rate through COVID-19 Data Visualization
+## Correlation Analysis of Fatality Rate through COVID-19 Data Visualization
 
 Team name: UHO (unist health organization)
 
@@ -6,7 +6,7 @@ Team members: 남대현 (ndh8392@unist.ac.kr), 정유호 (yuho8437@unist.ac.kr)
 
 
 
-###Setup
+### Setup
 
 We worked on React.js frontend framework.
 
@@ -32,7 +32,8 @@ npm start
 
 
 
-###Project goals
+### Project goals
+
 **"Finding factors that have a high impact on fatality rate"**
 
 If you carefully see the fatality rate by COVID-19 in world, you can find that some countries have a low fatality rate of less than 3%, while some countries have a high fatality rate of 8% or more. We thought that COVID-19 might have had a factor that has major influence on fatality, and we are trying to guess this factor through data visualization.
