@@ -18,7 +18,7 @@ npm start
 
 - When the frontend server is running, a web browser is automatically opened and our output will be displayed. If the web browser does not start automatically, open your web browser manually and type 'localhost:4000' in the url search bar.
 
-- Also, you can see our project result through this url link: https://yuho8437.github.io/covid-correlation/
+- Also, you can see our project result through this url link: https://yuhodots.github.io/covid-correlation/
 
 
 
